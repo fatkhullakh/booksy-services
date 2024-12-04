@@ -9,7 +9,7 @@ public class Service {
     private int serviceId;
     private String name;
     private double price;
-    private int duration;
-    private String ServiceCategory;
-    private int shopId;
+    private int duration; // in minutes
+    private String serviceCategory; //
+    private int shopId; //
 }
