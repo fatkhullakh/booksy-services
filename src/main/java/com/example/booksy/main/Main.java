@@ -4,63 +4,19 @@ import com.example.model.Service;
 import com.example.model.ServiceDTO;
 import com.example.model.Shop;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.ServiceConfigurationError;
+import java.util.*;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ForkJoinPool;
+import java.util.stream.Collectors;
+
+import static com.example.model.Shop.readFromFile;
+import static com.example.model.Shop.saveToFile;
 
 public class Main {
     public static void main(String[] args) {
-        // Create Services
-        Service haircut = Service.builder()
-                .serviceId(1)
-                .name("Haircut")
-                .price(15.0)
-                .duration(30) // Duration in minutes
-                .serviceCategory("Men's Hair")
-                .build();
 
-        Service beardTrim = Service.builder()
-                .serviceId(2)
-                .name("Beard Trim")
-                .price(10.0)
-                .duration(20)
-                .serviceCategory("Men's Grooming")
-                .build();
-
-        Service manicure = Service.builder()
-                .serviceId(3)
-                .name("Manicure")
-                .price(25.0)
-                .duration(45)
-                .serviceCategory("Nail Care")
-                .build();
-
-        // Create Shops
-        Shop barberShop = Shop.builder()
-                .id(1)
-                .name("Barber Shop")
-                .location("Downtown")
-                .phoneNumber("+123456789")
-                .email("contact@barbershop.com")
-                .ownerName("John Doe")
-                .rating(5) // Rating out of 5
-                .services(new ArrayList<>(List.of(haircut, beardTrim)))
-                .build();
-
-        Shop beautySalon = Shop.builder()
-                .id(2)
-                .name("Beauty Salon")
-                .location("Uptown")
-                .phoneNumber("+987654321")
-                .email("info@beautysalon.com")
-                .ownerName("Jane Smith")
-                .rating(4)
-                .services(new ArrayList<>(List.of(manicure)))
-                .build();
-
-        // Print Shops and Services
-        List<Shop> shops = List.of(barberShop, beautySalon);
-        for (Shop shop : shops) {
+        List<Shop> shops = DataGenerator.generateShops();
+        /*for (Shop shop : shops) {
             System.out.println("Shop: " + shop.getName() + ", Location: " + shop.getLocation());
             System.out.println("Owner: " + shop.getOwnerName() + ", Rating: " + shop.getRating());
             System.out.println("Contact: " + shop.getPhoneNumber() + ", Email: " + shop.getEmail());
@@ -70,10 +26,109 @@ public class Main {
                         ", " + service.getDuration() + " mins, " + service.getServiceCategory() + ")");
             }
             System.out.println();
+        } */
+        /* Transform services into DTOs
+        System.out.println("Services (as DTOs):");
+        for (Shop shop : shops) {
+            for (Service service : shop.getServices()) {
+                // Convert Service to ServiceDTO
+                ServiceDTO dto = toDTO(service, shop.getName());
+                // Print the DTO
+                System.out.println(dto);
+            }
+        } */
+
+        // 3. unique services into a Set
+        Set<Service> uniqueServices = shops.stream()
+                .flatMap(shop -> shop.getServices().stream())
+                .collect(Collectors.toSet());
+
+        // print
+        System.out.println("3. Unique Services:");
+        uniqueServices.forEach(service ->
+                System.out.println(service.getName() + " ($" + service.getPrice() + ", " + service.getDuration() + " mins)"));
+
+
+        // 4. Filter and sort services
+        List<Service> filteredAndSortedServices = uniqueServices.stream()
+                .filter(service -> service.getPrice() > 10)
+                .sorted(Comparator.comparingInt(Service::getDuration))
+                .collect(Collectors.toList());
+
+        // printing
+        System.out.println("4. Filtered and Sorted Services:");
+        filteredAndSortedServices.forEach(service ->
+                System.out.println(service.getName() + " ($" + service.getPrice() + ", " + service.getDuration() + " mins)"));
+
+        // 5. Transform into DTOs
+        Map<Service, String> serviceToShopMap = new HashMap<>();
+        for (Shop shop : shops) {
+            for (Service service : shop.getServices()) {
+                serviceToShopMap.put(service, shop.getName());
+            }
         }
+
+        List<ServiceDTO> serviceDTOs = uniqueServices.stream()
+                .map(service -> toDTO(service, serviceToShopMap.get(service)))
+                .sorted() // natural order
+                .toList();
+
+        System.out.println("5. Unique ServiceDTOs:");
+        for (ServiceDTO serviceDTO : serviceDTOs) {
+            System.out.println(serviceDTO);
+        }
+
+        // 6. Task to save to file
+        String fileName = "shops.bin";
+        saveToFile(shops, fileName);
+
+        List<Shop> deserializedShops = readFromFile(fileName);
+
+        System.out.println("6. Deserialized Shops:");
+        deserializedShops.forEach(System.out::println);
+
+
+        // 7. Thread Pool
+        ForkJoinPool customThreadPool = new ForkJoinPool(4);
+
+        try {
+            customThreadPool.submit(() ->
+                    shops.parallelStream().forEach(shop -> simulateWorkload(shop))
+            ).get(); // Wait for completion
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        } finally {
+            customThreadPool.shutdown();
+        }
+
+
+
+    }
+
+    public static ServiceDTO toDTO(Service service, String shopName) {
+        return ServiceDTO.builder()
+                .name(service.getName())
+                .price(service.getPrice())
+                .duration(service.getDuration())
+                .shopName(shopName)
+                .build();
+    }
+
+    public static void simulateWorkload(Shop shop) {
+        shop.getServices().forEach(service -> {
+            try {
+                // Simulate heavy work
+                Thread.sleep(1000);
+                System.out.println(Thread.currentThread().getName() + " processed " + service.getName());
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        });
     }
 
 
 
 
+
 }
+
