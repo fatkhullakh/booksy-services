@@ -5,13 +5,14 @@ import com.example.model.Shop;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class DataGenerator {
 
     public static List<Shop> generateShops() {
         // Create Services
         Service haircut = Service.builder()
-                .serviceId(1)
+                .serviceId(UUID.randomUUID())
                 .name("Haircut")
                 .price(15.0)
                 .duration(30) // in minutes
@@ -19,7 +20,7 @@ public class DataGenerator {
                 .build();
 
         Service beardTrim = Service.builder()
-                .serviceId(2)
+                .serviceId(UUID.randomUUID())
                 .name("Beard Trim")
                 .price(10.0)
                 .duration(20)
@@ -27,7 +28,7 @@ public class DataGenerator {
                 .build();
 
         Service manicure = Service.builder()
-                .serviceId(3)
+                .serviceId(UUID.randomUUID())
                 .name("Manicure")
                 .price(25.0)
                 .duration(45)
@@ -36,7 +37,7 @@ public class DataGenerator {
 
         // Create Shops
         Shop barberShop = Shop.builder()
-                .id(1)
+                .shopId((UUID.randomUUID()))
                 .name("Barber Shop")
                 .location("Downtown")
                 .phoneNumber("+123456789")
@@ -47,7 +48,7 @@ public class DataGenerator {
                 .build();
 
         Shop beautySalon = Shop.builder()
-                .id(2)
+                .shopId((UUID.randomUUID()))
                 .name("Beauty Salon")
                 .location("Uptown")
                 .phoneNumber("+987654321")
