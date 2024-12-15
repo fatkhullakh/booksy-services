@@ -11,7 +11,6 @@ public class Main {
         SpringApplication.run(Main.class, args);
 
     }
-
     /*for (Shop shop : shops) {
             System.out.println("Shop: " + shop.getName() + ", Location: " + shop.getLocation());
             System.out.println("Owner: " + shop.getOwnerName() + ", Rating: " + shop.getRating());
