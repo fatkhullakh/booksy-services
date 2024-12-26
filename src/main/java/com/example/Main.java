@@ -1,22 +1,17 @@
-package com.example.booksy.main;
+package com.example;
 
-import com.example.model.Service;
-import com.example.model.ServiceDTO;
-import com.example.model.Shop;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+//import static com.example.model.Shop.readFromFile;
+//import static com.example.model.Shop.saveToFile;
 
-import java.util.*;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ForkJoinPool;
-import java.util.stream.Collectors;
-
-import static com.example.model.Shop.readFromFile;
-import static com.example.model.Shop.saveToFile;
-
+@SpringBootApplication
 public class Main {
     public static void main(String[] args) {
+        SpringApplication.run(Main.class, args);
 
-        List<Shop> shops = DataGenerator.generateShops();
-        /*for (Shop shop : shops) {
+    }
+    /*for (Shop shop : shops) {
             System.out.println("Shop: " + shop.getName() + ", Location: " + shop.getLocation());
             System.out.println("Owner: " + shop.getOwnerName() + ", Rating: " + shop.getRating());
             System.out.println("Contact: " + shop.getPhoneNumber() + ", Email: " + shop.getEmail());
@@ -27,7 +22,7 @@ public class Main {
             }
             System.out.println();
         } */
-        /* Transform services into DTOs
+    /* Transform services into DTOs
         System.out.println("Services (as DTOs):");
         for (Shop shop : shops) {
             for (Service service : shop.getServices()) {
@@ -37,7 +32,8 @@ public class Main {
                 System.out.println(dto);
             }
         } */
-
+    /*
+        List<Shop> shops = DataGenerator.generateShops();
         // 3. unique services into a Set
         Set<Service> uniqueServices = shops.stream()
                 .flatMap(shop -> shop.getServices().stream())
@@ -99,13 +95,8 @@ public class Main {
             e.printStackTrace();
         } finally {
             customThreadPool.shutdown();
-        }
-
-
-
-    }
-
-    public static ServiceDTO toDTO(Service service, String shopName) {
+        } */
+    /*public static ServiceDTO toDTO(Service service, String shopName) {
         return ServiceDTO.builder()
                 .name(service.getName())
                 .price(service.getPrice())
@@ -124,11 +115,6 @@ public class Main {
                 e.printStackTrace();
             }
         });
-    }
-
-
-
-
-
+    } */
 }
 
