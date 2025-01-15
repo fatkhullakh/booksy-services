@@ -26,7 +26,7 @@ public class DataGenerator {
     public void init() {
         // Create Shop instances
         Shop barberShop = new Shop(UUID.randomUUID(), "Barber Shop", "Downtown", "123456789", "contact@barbershop.com", "John Doe", 5);
-        Shop beautySalon = new Shop(UUID.randomUUID(), "Beauty Salon", "Uptown", "info@beautysalon.com", "+987654321", "Jane Smith", 4);
+        Shop beautySalon = new Shop(UUID.randomUUID(), "Beauty Salon", "Uptown", "+987654321", "info@beautysalon.com", "Jane Smith", 4);
 
         // Save Shops to the database
         shopService.save(barberShop);

@@ -9,6 +9,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import static java.util.UUID.randomUUID;
 
@@ -26,7 +27,7 @@ public class Shop implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    private UUID  shopId = randomUUID();
+    private UUID  shopId = UUID.randomUUID();
 
     @Column(name = "name", nullable = false)
     private String name;
@@ -46,7 +47,7 @@ public class Shop implements Serializable {
     @Column(name = "rating", nullable = false)
     private int rating; // 1 out of 5
 
-    @OneToMany(mappedBy = "shop", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "shop", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ServiceEntity> services = new ArrayList<>();
 
     /*public Shop(String name, String location, String phoneNumber, String email, int rating) {
@@ -57,6 +58,15 @@ public class Shop implements Serializable {
         this.rating = rating;
     } */
 
+    public Shop(String name, String location, String phoneNumber, String email, String ownerName, int rating) {
+        this.name = name;
+        this.location = location;
+        this.phoneNumber = phoneNumber;
+        this.email = email;
+        this.ownerName = ownerName;
+        this.rating = rating;
+    }
+
     public Shop(UUID randomUUID, String name, String location, String phoneNumber, String email, String ownerName, int rating) {
         this.shopId = randomUUID();
         this.name = name;
@@ -65,6 +75,10 @@ public class Shop implements Serializable {
         this.email = email;
         this.ownerName = ownerName;
         this.rating = rating;
+    }
+
+    public UUID getShopId() {
+        return shopId;
     }
 
     public String getName() { return name; }
@@ -78,6 +92,13 @@ public class Shop implements Serializable {
     public String getOwnerName() { return ownerName; }
 
     public int getRating() { return rating; }
+
+    public List<UUID> getServiceIds() {
+        return services.stream()
+                .map(ServiceEntity::getServiceId) // Assuming ServiceEntity has a `getServiceId` method
+                .collect(Collectors.toList());
+    }
+
 
     /*public static void saveToFile(List<Shop> shops, String fileName) {
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(fileName))) {

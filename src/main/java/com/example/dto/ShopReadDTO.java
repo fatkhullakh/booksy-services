@@ -1,32 +1,30 @@
 package com.example.dto;
+import lombok.Data;
 
+import java.util.List;
+import java.util.UUID;
+
+@Data
 public class ShopReadDTO {
-    private Long id;
+    private UUID ShopId;
     private String name;
-    private String description;
+
+    public ShopReadDTO() {}
+
+    public ShopReadDTO(UUID shopId, String name) {
+        this.ShopId = shopId;
+        this.name = name;
+    }
 
     // Getters and Setters
-    public Long getId() {
-        return id;
-    }
+    public UUID getShopId() { return ShopId; }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+    public void setShopId(UUID shopId) { ShopId = shopId; }
 
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+    public void setName(String name) { this.name = name; }
 
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
 }

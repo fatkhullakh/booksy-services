@@ -1,0 +1,53 @@
+### POST a new Shop
+POST http://localhost:8080/api/shops
+Content-Type: application/json
+
+{
+  "name": "Shop 1",
+  "location": "123 Main Street",
+  "phoneNumber": "1234567890",
+  "email": "shop1@example.com",
+  "ownerName": "John Doe",
+  "rating": 5
+}
+
+###
+
+### PUT an existing Shop
+PUT http://localhost:8080/api/shops/550e8400-e29b-41d4-a716-446655440000
+Content-Type: application/json
+
+{
+  "name": "Updated Shop Name",
+  "location": "456 Updated Street",
+  "phoneNumber": "9876543210",
+  "email": "updatedshop@example.com",
+  "ownerName": "Jane Doe",
+  "rating": 4
+}
+
+###
+
+### POST a new Service for a Shop
+POST http://localhost:8080/api/shops/550e8400-e29b-41d4-a716-446655440000/services
+Content-Type: application/json
+
+{
+  "name": "Cleaning Service",
+  "price": 50.00,
+  "duration": 60,
+  "serviceCategory": "Cleaning"
+}
+
+###
+
+### PUT an existing Service
+PUT http://localhost:8080/api/services/e29b41d4-a716-550e-8400-446655440000
+Content-Type: application/json
+
+{
+  "name": "Updated Cleaning Service",
+  "price": 60.00,
+  "duration": 75,
+  "serviceCategory": "Updated Cleaning"
+}
