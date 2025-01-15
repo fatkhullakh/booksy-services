@@ -1,5 +1,6 @@
 package com.example.service;
 
+import com.example.dto.ShopReadDTO;
 import com.example.model.Shop;
 import com.example.repository.ShopRepository;
 import jakarta.transaction.Transactional;

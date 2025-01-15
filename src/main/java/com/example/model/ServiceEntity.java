@@ -41,12 +41,12 @@ public class ServiceEntity implements Serializable {
     private Shop shop;
 
 
-    /*public Service(String name, Double price, int duration, String serviceCategory) {
+    public ServiceEntity(String name, Double price, int duration, String serviceCategory, UUID shopId) {
         this.name = name;
         this.price = price;
         this.duration = duration;
         this.serviceCategory = serviceCategory;
-    } */
+    }
 
     public ServiceEntity(UUID randomUUID, String name, Double price, int duration, String serviceCategory, Shop shop) {
         this.serviceId = randomUUID;
@@ -57,11 +57,14 @@ public class ServiceEntity implements Serializable {
         this.shop = shop;
     }
 
+    public UUID getServiceId() { return serviceId; }
     public String name() { return name; }
     public double price() { return price; }
     public int duration() { return duration; }
     public String serviceCategory() { return serviceCategory; }
     public Shop shop() { return shop; }
 
+    public Shop getShop() { return shop; }
 
+    public void setShop(Shop shop) { this.shop = shop; }
 }
